@@ -1,1 +1,0 @@
-# Mock-tngampra-wchyun

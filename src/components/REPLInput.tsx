@@ -3,8 +3,12 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 
 interface REPLInputProps {
-  commands: string[];
-  setCommands: Dispatch<SetStateAction<string[]>>;
+  // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
+  // CHANGED
+  history: string[];
+  setHistory: Dispatch<SetStateAction<string[]>>;
+  mode: string;
+  setMode: Dispatch<SetStateAction<string>>;
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
@@ -12,18 +16,28 @@ export function REPLInput(props: REPLInputProps) {
   // Remember: let React manage state in your webapp.
   // Manages the contents of the input box
   const [commandString, setCommandString] = useState<string>("");
-  // TODO WITH TA : add a count state
+  // Manages the current amount of times the button is clicked
   const [count, setCount] = useState<number>(0);
 
-  function handleSubmit(): void {
+  // This function is triggered when the button is clicked.
+  function handleSubmit(commandString: string) {
+    var splitted = commandString.split(" ");
+    var command = splitted[0];
+
+    if (command == "mode") {
+      props.mode === "brief"
+        ? props.setMode("verbose")
+        : props.setMode("brief");
+    } else if (command == "load_file") {
+    } else if (command == "view") {
+    } else if (command == "search") {
+    } else {
+    }
+
     setCount(count + 1);
-    props.setCommands(props.commands.concat(commandString));
+    props.setHistory([...props.history, commandString]);
     setCommandString("");
-    console.log(count); // doesn't actually display new value because it is async it updates at next render
   }
-  // TODO WITH TA: build a handleSubmit function called in button onClick
-  // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
-  // add to it with new commands.
   /**
    * We suggest breaking down this component into smaller components, think about the individual pieces
    * of the REPL and how they connect to each other...
@@ -42,9 +56,10 @@ export function REPLInput(props: REPLInputProps) {
           ariaLabel={"Command input"}
         />
       </fieldset>
-      {/* TODO WITH TA: Build a handleSubmit function that increments count and displays the text in the button */}
       {/* TODO: Currently this button just counts up, can we make it push the contents of the input box to the history?*/}
-      <button onClick={handleSubmit}>Submitted {count} times</button>
+      <button onClick={() => handleSubmit(commandString)}>
+        Submitted {count} times
+      </button>
     </div>
   );
 }
