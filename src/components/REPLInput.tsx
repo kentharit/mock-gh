@@ -1,17 +1,20 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
+import all_data from "../mocked-data/mockedJson";
 
-var filepaths = {}
+var data = all_data["data"];
+var searchData = all_data["search_data"];
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
   // CHANGED
-  history: [string, string[][] | string][];
-  setHistory: Dispatch<SetStateAction<[string, string | string[][]][]>>;
+  history: [string, string[][] | string, string][];
+  setHistory: Dispatch<SetStateAction<[string, string | string[][], string][]>>;
   mode: string;
   setMode: Dispatch<SetStateAction<string>>;
 }
+
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
 export function REPLInput(props: REPLInputProps) {
@@ -22,6 +25,8 @@ export function REPLInput(props: REPLInputProps) {
   const [count, setCount] = useState<number>(0);
 
   const [loadedFilepath, setloadedFilepath] = useState<string>("");
+
+  const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
   // This function is triggered when the button is clicked.
   function handleSubmit(commandString: string) {
@@ -35,23 +40,60 @@ export function REPLInput(props: REPLInputProps) {
           ? props.setMode("verbose")
           : props.setMode("brief");
         output = "Successfully changed mode";
-      }
-      else {
-        output = "Wrong number of arguments for mode";
+      } else {
+        output = "Wrong number of arguments for mode command";
       }
     } else if (command == "load_file") {
+      //TODO HANDLE HEADER
       if (splitted.length == 2) {
-        var filepath = splitted[1]
-        if (filepath in filepaths) {
-
-        } 
+        var filepath = splitted[1];
+        if (filepath in data) {
+          output = "File successfully loaded";
+          console.log(filepath);
+          setloadedFilepath(filepath);
+          setHasLoaded(true);
+        } else {
+          output = "File not found in directory";
+        }
+      } else {
+        output = "Wrong number of arguments for load command";
       }
     } else if (command == "view") {
-      output = [
-        ["1123123", "2123123123123"],
-        ["3123", "4123213213"],
-      ];
+      if (hasLoaded) {
+        if (splitted.length == 1) {
+          output =
+            loadedFilepath in data
+              ? data[loadedFilepath]
+              : "File not found in directory";
+        } else {
+          output = "Wrong number of arguments for view command";
+        }
+      } else {
+        output = "Cannot call view before load";
+      }
     } else if (command == "search") {
+      if (hasLoaded) {
+        if (splitted.length == 3) {
+          // HOW TO DEAL WITH SPACES IN INPUT
+          var column = splitted[1];
+          var value = splitted[2];
+          var key = [column, value];
+
+          if (loadedFilepath in searchData) {
+            var filepath_commands = searchData[loadedFilepath];
+            output =
+              JSON.stringify(key) in filepath_commands
+                ? filepath_commands[JSON.stringify(key)]
+                : "Command does not exist in mocked search data";
+          } else {
+            output = "File not found in directory";
+          }
+        } else {
+          output = "Wrong number of arguments for search command";
+        }
+      } else {
+        output = "Cannot call search before load";
+      }
     } else {
       output = "Not a valid command";
     }
@@ -60,7 +102,7 @@ export function REPLInput(props: REPLInputProps) {
       output = "Not a valid command";
     }
 
-    props.setHistory([...props.history, [command, output]]);
+    props.setHistory([...props.history, [command, output, props.mode]]);
 
     setCount(count + 1);
 
@@ -88,20 +130,6 @@ export function REPLInput(props: REPLInputProps) {
       <button onClick={() => handleSubmit(commandString)}>
         Submitted {count} times
       </button>
-      <table className="center-table">
-        <tr>
-          <th>Header 1</th>
-          <th>Header 2</th>
-        </tr>
-        <tr>
-          <td>Data 1, Row 1</td>
-          <td>Data 2, Row 1</td>
-        </tr>
-        <tr>
-          <td>Data 1, Row 2</td>
-          <td>Data 2, Row 2</td>
-        </tr>
-      </table>
     </div>
   );
 }

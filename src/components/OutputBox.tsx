@@ -18,25 +18,31 @@ export function OutputBox({ command, data, mode }: OutputBoxProps) {
       // Check if data is a list of list of strings (string[][])
       // If so, generate an HTML table
       return (
-        <table>
-          <tbody>
-            {data.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((cell, cellIndex) => (
-                  <td key={cellIndex}>{cell}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="bordered-div">
+          <table>
+            <tbody>
+              {data.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       );
     } else {
-      return <p> {data} </p>;
+      return (
+        <div className="bordered-div">
+          <p> {data} </p>
+        </div>
+      );
     }
   } else {
     if (Array.isArray(data)) {
       return (
-        <div>
+        <div className="bordered-div">
           <p> Command: {command} </p>
           <p> Output: </p>
           <table>
@@ -54,7 +60,7 @@ export function OutputBox({ command, data, mode }: OutputBoxProps) {
       );
     } else {
       return (
-        <div>
+        <div className="bordered-div">
           <p> Command: {command} </p>
           <p> Output: {data} </p>
         </div>

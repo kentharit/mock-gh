@@ -4,7 +4,7 @@ import { OutputBox } from "./OutputBox";
 interface REPLHistoryProps {
   // TODO: Fill with some shared state tracking all the pushed commands
   // CHANGED
-  history: [string, string[][] | string][];
+  history: [string, string[][] | string, string][];
   mode: string;
 }
 export function REPLHistory(props: REPLHistoryProps) {
@@ -17,7 +17,7 @@ export function REPLHistory(props: REPLHistoryProps) {
         <OutputBox
           command={historyTuple[0]}
           data={historyTuple[1]}
-          mode={props.mode}
+          mode={historyTuple[2]}
         />
       ))}
     </div>
