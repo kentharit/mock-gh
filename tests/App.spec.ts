@@ -18,12 +18,6 @@ test.beforeEach(() => {
   // TODO: Is there something we need to do before every test case to avoid repeating code?
 });
 
-/**
- * Don't worry about the "async" yet. We'll cover it in more detail
- * for the next sprint. For now, just think about "await" as something
- * you put before parts of your test that might take time to run,
- * like any interaction with the page.
- */
 test("on page load, i see an input bar", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
   await page.goto("http://localhost:8000/");
@@ -75,6 +69,41 @@ test("load two files, and make sure the correct file is viewed", async ({
 
   await page.getByRole("button", { name: "Submit" }).click();
 
+  await expect(page.getByRole("table")).toBeVisible();
+});
+
+test("load two files, verbose mode, and make sure the correct file is viewed", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("load_file fakefolder/data/ri_earnings.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page
+    .getByLabel("Command input")
+    .fill("load_file fakefolder/data/ny_earnings.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page.getByLabel("Command input").fill("view");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(
+    page.getByText("Command: load_file fakefolder/data/ny_earnings.csv")
+  ).toBeVisible();
+  await expect(page.getByText("Command: view")).toBeVisible();
   await expect(page.getByRole("table")).toBeVisible();
 });
 
@@ -133,8 +162,8 @@ test("load two files, verbose mode, and make sure search returns a table", async
 
   await page.getByRole("button", { name: "Submit" }).click();
 
+  await expect(page.getByText("Command: search City/Town RI")).toBeVisible();
   await expect(page.getByRole("table")).toBeVisible();
-  await expect(page.getByText("Command: search")).toBeVisible();
 });
 
 test("load valid file path", async ({ page }) => {
@@ -179,5 +208,98 @@ test("load incorrect number of arguments", async ({ page }) => {
 
   await expect(
     page.getByText("Wrong number of arguments for load command")
+  ).toBeVisible();
+});
+
+test("view before load with incorrect arguments", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("view fakefolder/data/ny_earnings.csv blahblahblah");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page.getByText("Cannot call view before load")).toBeVisible();
+});
+
+test("view after load with incorrect arguments", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("load_file fakefolder/data/ny_earnings.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("view fakefolder/data/ny_earnings.csv blahblahblah");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(
+    page.getByText("Wrong number of arguments for view command")
+  ).toBeVisible();
+});
+
+test("search before load with incorrect number of arguments", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("search blahblahblah");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page.getByText("Cannot call search before load")).toBeVisible();
+});
+
+test("search after load with incorrect arguments", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("load_file fakefolder/data/ny_earnings.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("search fakefolder/data/ny_earnings.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(
+    page.getByText("Wrong number of arguments for search command")
+  ).toBeVisible();
+});
+
+test("mode incorrect number of arguments", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode blahblahblah");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(
+    page.getByText("Wrong number of arguments for mode command")
   ).toBeVisible();
 });

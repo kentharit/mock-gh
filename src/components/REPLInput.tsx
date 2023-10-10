@@ -102,7 +102,7 @@ export function REPLInput(props: REPLInputProps) {
       output = "Not a valid command";
     }
 
-    props.setHistory([...props.history, [command, output, props.mode]]);
+    props.setHistory([...props.history, [commandString, output, props.mode]]);
 
     setCount(count + 1);
 
