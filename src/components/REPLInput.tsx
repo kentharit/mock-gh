@@ -127,9 +127,7 @@ export function REPLInput(props: REPLInputProps) {
         />
       </fieldset>
       {/* TODO: Currently this button just counts up, can we make it push the contents of the input box to the history?*/}
-      <button onClick={() => handleSubmit(commandString)}>
-        Submitted {count} times
-      </button>
+      <button onClick={() => handleSubmit(commandString)}>Submit</button>
     </div>
   );
 }
