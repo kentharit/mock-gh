@@ -16,6 +16,7 @@ data["fakefolder/data/ny_earnings.csv"] = [
   ["Item 1A", "Item 1B", "Item 1C", "Item 1D"],
 ];
 
+data["empty.csv"] = [];
 
 const search_data: { [key: string]: any } = {};
 

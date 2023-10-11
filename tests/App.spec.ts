@@ -166,6 +166,23 @@ test("load two files, verbose mode, and make sure search returns a table", async
   await expect(page.getByRole("table")).toBeVisible();
 });
 
+test("load and view empty csv file", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file empty.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page.getByLabel("Command input").fill("view");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(page.getByRole("table")).toBeVisible();
+});
+
 test("load valid file path", async ({ page }) => {
   await page.goto("http://localhost:8000/");
 
