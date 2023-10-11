@@ -14,27 +14,32 @@ interface REPLInputProps {
 }
 
 /**
- * REPL input class’s main role is to manage all the inputs that are passed through the text box.
- * We will initially count how many times the submit button is pressed.
- * Then we will allow the user to input mode in the textbox.
- * When mode is initially called, it will be in a brief mode, and if the user types in mode again,
- * 	it will go to verbose state.
- * There are also other functionalities like view command, and the success
- * 	message will be returned when the file is in the correct CSV format.
- * Finally, the last command we have is search where we will use “JSON.stringfy” method to find
- * 	the value the user hopes to search and will look for it inside the loaded CSV file.
- * All the errors are caught as we will be looking for cases that have no file found,
- * 	inputting wrong value for search results, calling search before loading, or passing
- * 	through random message inside the tool bar.
+ * REPL input class’s main role is to manage all the inputs that are passed through
+ * the text box. We will initially count how many times the submit button is pressed.
+ * Then we will allow the user to input mode in the textbox. When mode is initially
+ * called, it will be in a brief mode, and if the user types in mode again, it will
+ * go to verbose state. There are also other functionalities like view command, and
+ * the success message will be returned when the file is in the correct CSV format.
+ * Finally, the last command we have is search where we will use “JSON.stringfy”
+ * method to find the value the user hopes to search and will look for it inside
+ * the loaded CSV file. All the errors are caught as we will be looking for cases
+ * that have no file found, inputting wrong value for search results, calling
+ * search before loading, or passing through random message inside the tool bar.
+ * @param props
+ * @returns
  */
 export function REPLInput(props: REPLInputProps) {
+  // Remember: let React manage state in your webapp.
+  // Manages the contents of the input box
   const [commandString, setCommandString] = useState<string>("");
+  // Manages the current amount of times the button is clicked
   const [count, setCount] = useState<number>(0);
 
   const [loadedFilepath, setloadedFilepath] = useState<string>("");
 
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
+  // This function is triggered when the button is clicked.
   function handleSubmit(commandString: string) {
     var splitted = commandString.split(" ");
     var command = splitted[0];

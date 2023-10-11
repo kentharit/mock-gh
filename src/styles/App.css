@@ -1,3 +1,7 @@
+/**
+This is the class where we set the background color, overall color 
+scheme, and the font size of the front-end. 
+*/
 .App {
   text-align: center;
 }
