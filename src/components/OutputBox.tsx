@@ -9,8 +9,13 @@ interface OutputBoxProps {
   mode: string;
 }
 
-// Input boxes contain state. We want to make sure React is managing that state,
-//   so we have a special component that wraps the input box.
+/**
+ * The output box displays differently based on what mode the user hopes to be part of. 
+ * In the “brief” output, it will just display the result of running the command. 
+ * In the verbose mode, it will display both the command text and the result of running the command.  
+ * @param OutputBoxProps: contains the command, data, and mode corresponding to each command call. 
+ * @returns div that contains a table and text or only text depending on mode and command.
+ */
 export function OutputBox({ command, data, mode }: OutputBoxProps) {
   //   return mode === "brief" ? <p> {command} </p> : <p> no command </p>;
   if (mode === "brief") {
