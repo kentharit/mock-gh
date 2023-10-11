@@ -320,3 +320,36 @@ test("mode incorrect number of arguments", async ({ page }) => {
     page.getByText("Wrong number of arguments for mode command")
   ).toBeVisible();
 });
+
+test("load two files, verbose mode, and testing for value that is not present", async ({
+  page,
+}) => {
+  await page.goto("http://localhost:8000/");
+
+  // Step 2: Interact with the page
+  // Locate the element you are looking for
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("load_file fakefolder/data/ny_earnings.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page
+    .getByLabel("Command input")
+    .fill("load_file fakefolder/data/ri_earnings.csv");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await page.getByLabel("Command input").fill("search City/Town ABCDEFG");
+
+  await page.getByRole("button", { name: "Submit" }).click();
+
+  await expect(
+    page.getByText("Command does not exist in mocked search data")
+  ).toBeVisible();
+});
