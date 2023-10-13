@@ -1,7 +1,7 @@
 /*
-  This is a reasonable starting point for the CSS in Mock.
-  Positioning in CSS can sometimes be annoying to manage, so we've opted to 
-  give you this starter CSS. Feel free to modify it as you wish, though.
+This is the class that handles the overall structure of front-end. 
+It handles the style of table, repl-input, repl-history, and the borders.
+
 */
 
 .repl {

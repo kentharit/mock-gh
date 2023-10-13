@@ -1,3 +1,7 @@
+/**
+This is the class where we inputted the button and changed the color 
+scheme of the overall frontend output. 
+*/
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
