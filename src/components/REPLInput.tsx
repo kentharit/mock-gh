@@ -6,6 +6,11 @@ import all_data from "../mocked-data/mockedJson";
 var data = all_data["data"];
 var searchData = all_data["search_data"];
 
+/**
+ * Interface to specify the props taken in by REPL input. 
+ * Includes a history which is a list of lists, and a setter function for it.
+ * Also includes mode which is a string a sets the mode of the program. 
+ */
 interface REPLInputProps {
   history: [string, string[][] | string, string][];
   setHistory: Dispatch<SetStateAction<[string, string | string[][], string][]>>;
@@ -50,7 +55,6 @@ export function REPLInput(props: REPLInputProps) {
         output = "Wrong number of arguments for mode command";
       }
     } else if (command == "load_file") {
-      //TODO HANDLE HEADER
       if (splitted.length == 2) {
         var filepath = splitted[1];
         if (filepath in data) {
@@ -80,7 +84,6 @@ export function REPLInput(props: REPLInputProps) {
     } else if (command == "search") {
       if (hasLoaded) {
         if (splitted.length == 3) {
-          // HOW TO DEAL WITH SPACES IN INPUT
           var column = splitted[1];
           var value = splitted[2];
           var key = [column, value];
@@ -115,15 +118,10 @@ export function REPLInput(props: REPLInputProps) {
     setCommandString("");
   }
   /**
-   * We suggest breaking down this component into smaller components, think about the individual pieces
-   * of the REPL and how they connect to each other...
+   * The REPL input component makes use of the ControlledInput component along with a button.
    */
   return (
     <div className="repl-input">
-      {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in
-            braces, so that React knows it should be interpreted as TypeScript */}
-      {/* I opted to use this HTML tag; you don't need to. It structures multiple input fields
-            into a single unit, which makes it easier for screenreaders to navigate. */}
       <fieldset>
         <legend>Enter a command:</legend>
         <ControlledInput
@@ -132,7 +130,6 @@ export function REPLInput(props: REPLInputProps) {
           ariaLabel={"Command input"}
         />
       </fieldset>
-      {/* TODO: Currently this button just counts up, can we make it push the contents of the input box to the history?*/}
       <button onClick={() => handleSubmit(commandString)}>Submit</button>
     </div>
   );

@@ -16,6 +16,8 @@ data["fakefolder/data/ny_earnings.csv"] = [
   ["Item 1A", "Item 1B", "Item 1C", "Item 1D"],
 ];
 
+data["one_column.csv"] = [["City/Town"], ["RI"], ["RI"], ["BR"]];
+
 data["empty.csv"] = [];
 
 const search_data: { [key: string]: any } = {};
@@ -32,6 +34,16 @@ search_data["fakefolder/data/ri_earnings.csv"][
   ],
   ["Rhode Island", "74,489.00", "95,198.00", "39,603.00"],
   ["Rhode Island", "28,371.00", "18,003.00", "98,321.00"],
+];
+
+search_data["empty.csv"] = {};
+search_data["empty.csv"][JSON.stringify(["City/Town", "RI"])] = [];
+
+search_data["one_column.csv"] = {};
+search_data["one_column.csv"][JSON.stringify(["City/Town", "RI"])] = [
+  ["City/Town"],
+  ["RI"],
+  ["RI"],
 ];
 
 const all_data: { [key: string]: { [key: string]: any } } = {};
