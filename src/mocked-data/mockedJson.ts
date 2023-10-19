@@ -52,3 +52,4 @@ all_data["data"] = data;
 all_data["search_data"] = search_data;
 
 export default all_data;
+
